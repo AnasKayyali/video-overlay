@@ -3,6 +3,10 @@ import Parameters from './parameters'
 import UploadArea from './UploadArea'
 import { Spin, notification } from 'antd'
 import Validation from '../Validation'
+import TextInput from './TextInput'
+import ModifiedVideo from './modifiedVideo'
+import Loader from './Loader'
+import SendButton from './SendButton'
 
 const Main = () => {
 
@@ -51,10 +55,7 @@ const Main = () => {
         startProcess === false ? 
           <>
             <UploadArea uploaded={uploaded} setUploaded={setUploaded} setVideoFile={setVideoFile} notify={notify} />
-            <div className="flex items-center gap-2 xs:w-[70%] md:w-[45%] lg:w-[35%] xl:w-[27%]">
-              <h1 className="xs:text-lg">text</h1>
-              <input type="text" value={text} onChange={(e) => setText(e.target.value)} className="border xs:py-1 lg:py-[0.4rem] px-3 shadow-sm rounded-md w-full xs:text-[1.1rem] lg:text-[1.2rem]" />
-            </div>
+            <TextInput text={text} setText={setText} />
             <Parameters
               x={x} y={y} t={time} d={duration} s={fontSize}
               handleX={setX} handleY={setY}  
@@ -62,26 +63,14 @@ const Main = () => {
               handleS={setFontSize}
               notify={notify}
             />
-            <button 
-              className="xs:p-1 xs:w-[30%] md:w-[20%] lg:w-[15%] xl:w-[12%] bg-[#01B0F1] text-white text-lg border border-transparent shadow-md rounded-md mt-2"
-              onClick={handleSend}  
-            >
-              Send
-            </button>
+            <SendButton handleSend={handleSend} />
           </>
           :
           loader === true ? 
-            <>
-              <Spin size='large' />
-              <h1>This will take some time...</h1>
-            </>
-          :
-          <>
-            <video src={videoFile} controls className="xs:w-[80%] md:w-[60%] lg:w-[40%] xl:w-[30%]"></video>
-            <button onClick={handleReset} className="bg-[#01B0F1] xs:px-3 py-[0.35rem] text-[1.12rem] text-white border border-transparent shadow-sm rounded-md">Upload another video</button>
-          </>
-      }
-      
+            <Loader />
+            :
+            <ModifiedVideo videoFile={videoFile} handleReset={handleReset} />
+      } 
     </main>
   )
 }
